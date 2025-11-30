@@ -1,3 +1,19 @@
+// Supabase init
+const SUPABASE_URL = 'https://yeucpppcwxngpuvkukvz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlldWNwcHBjd3huZ3B1dmt1a3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNTQ3MTMsImV4cCI6MjA3OTkzMDcxM30.OEo65rLXhy51igM2G4bW-HVTnLw8yAWnmzslzE-mSko';
+
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function getCurrentUser() {
+  const { data, error } = await supabaseClient.auth.getUser();
+  if (error) {
+    console.log('auth error', error.message);
+    return null;
+  }
+  return data.user;
+}
+
+
 // ===== Translations =====
 const translations = {
     en: {
