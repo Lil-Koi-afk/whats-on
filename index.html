@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's On! – Discover Local Events</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">What's On!</a>
+            <div class="header-right">
+                <!-- Language Selector -->
+                <div class="language-selector">
+                    <button class="language-btn" id="language-btn">
+                        <span id="current-flag">🇬🇧</span>
+                        <span id="current-lang">EN</span>
+                    </button>
+                    <div class="language-dropdown" id="language-dropdown">
+                        <button class="language-option active" data-lang="en" data-flag="🇬🇧">🇬🇧 English</button>
+                        <button class="language-option" data-lang="de" data-flag="🇩🇪">🇩🇪 Deutsch</button>
+                        <button class="language-option" data-lang="es" data-flag="🇪🇸">🇪🇸 Español</button>
+                        <button class="language-option" data-lang="it" data-flag="🇮🇹">🇮🇹 Italiano</button>
+                    </div>
+                </div>
+                <nav class="nav-links">
+                    <a href="#" class="nav-link" data-i18n="explore">Explore</a>
+                    <a href="#" class="nav-link" data-i18n="about">About</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Search -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 data-i18n="hero_title">Discover what's happening around you</h1>
+            <p class="hero-subtitle" data-i18n="hero_subtitle">Find festivals, concerts, markets, and local events anywhere in the world</p>
+            
+            <!-- Search Box -->
+            <div class="search-container">
+                <div class="search-box">
+                    <!-- Location Input -->
+                    <div class="search-field">
+                        <label data-i18n="where">Where</label>
+                        <input type="text" id="location-input" data-i18n-placeholder="search_placeholder" placeholder="Search cities, regions, islands...">
+                    </div>
+                    
+                    <!-- Radius -->
+                    <div class="search-field search-field-small">
+                        <label data-i18n="radius">Radius</label>
+                        <select id="radius-select">
+                            <option value="0" data-i18n="exact">Exact</option>
+                            <option value="10">+10 km</option>
+                            <option value="25">+25 km</option>
+                            <option value="50" selected>+50 km</option>
+                            <option value="100">+100 km</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Date Range -->
+                    <div class="search-field date-field" id="date-field">
+                        <label data-i18n="when">When</label>
+                        <div class="date-display" id="date-display">
+                            <span id="date-display-text">Select dates</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <input type="hidden" id="date-start">
+                        <input type="hidden" id="date-end">
+                    </div>
+                    
+                    <!-- Calendar Overlay -->
+                    <div class="calendar-overlay" id="calendar-overlay"></div>
+                    
+                    <!-- Calendar Popup -->
+                    <div class="calendar-popup" id="calendar-popup">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" id="prev-month">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <div class="calendar-months">
+                                <span class="calendar-month-title" id="month-title-1"></span>
+                                <span class="calendar-month-title" id="month-title-2"></span>
+                            </div>
+                            <button class="calendar-nav" id="next-month">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="calendar-body">
+                            <div class="calendar-grid" id="calendar-1"></div>
+                            <div class="calendar-grid" id="calendar-2"></div>
+                        </div>
+                        <div class="calendar-footer">
+                            <button class="calendar-clear" id="calendar-clear" data-i18n="clear">Clear</button>
+                            <button class="calendar-apply" id="calendar-apply" data-i18n="apply">Apply</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Button -->
+                    <button class="search-button" id="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <span data-i18n="search">Search</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filters -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="categories-scroll">
+                <button class="category-pill active" data-category="all">
+                    <span class="category-icon">🎉</span>
+                    <span data-i18n="cat_all">All Events</span>
+                </button>
+                <button class="category-pill" data-category="festivals">
+                    <span class="category-icon">🎪</span>
+                    <span data-i18n="cat_festivals">Festivals</span>
+                </button>
+                <button class="category-pill" data-category="concerts">
+                    <span class="category-icon">🎵</span>
+                    <span data-i18n="cat_concerts">Concerts</span>
+                </button>
+                <button class="category-pill" data-category="markets">
+                    <span class="category-icon">🛍️</span>
+                    <span data-i18n="cat_markets">Markets</span>
+                </button>
+                <button class="category-pill" data-category="sports">
+                    <span class="category-icon">⚽</span>
+                    <span data-i18n="cat_sports">Sports</span>
+                </button>
+                <button class="category-pill" data-category="culture">
+                    <span class="category-icon">🎭</span>
+                    <span data-i18n="cat_culture">Culture</span>
+                </button>
+                <button class="category-pill" data-category="nightlife">
+                    <span class="category-icon">🌙</span>
+                    <span data-i18n="cat_nightlife">Nightlife</span>
+                </button>
+                <button class="category-pill" data-category="food">
+                    <span class="category-icon">🍽️</span>
+                    <span data-i18n="cat_food">Food & Drink</span>
+                </button>
+                <button class="category-pill" data-category="family">
+                    <span class="category-icon">👨‍👩‍👧‍👦</span>
+                    <span data-i18n="cat_family">Family</span>
+                </button>
+                <button class="category-pill" data-category="outdoor">
+                    <span class="category-icon">🏔️</span>
+                    <span data-i18n="cat_outdoor">Outdoor</span>
+                </button>
+            </div>
+            
+            <!-- Price Filters -->
+            <div class="filter-row">
+                <span class="filter-label" data-i18n="price">Price:</span>
+                <div class="filter-pills">
+                    <button class="filter-pill" data-price="free">
+                        <span data-i18n="price_free">Free</span>
+                    </button>
+                    <button class="filter-pill" data-price="cheap">
+                        <span>&lt;20€</span>
+                    </button>
+                    <button class="filter-pill" data-price="medium">
+                        <span>20-50€</span>
+                    </button>
+                    <button class="filter-pill" data-price="expensive">
+                        <span>&gt;50€</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Duration Filters -->
+            <div class="filter-row">
+                <span class="filter-label" data-i18n="duration">Duration:</span>
+                <div class="filter-pills">
+                    <button class="filter-pill" data-duration="short">
+                        <span>&lt;1h</span>
+                    </button>
+                    <button class="filter-pill" data-duration="medium">
+                        <span>1-3h</span>
+                    </button>
+                    <button class="filter-pill" data-duration="halfday">
+                        <span data-i18n="half_day">Half day</span>
+                    </button>
+                    <button class="filter-pill" data-duration="fullday">
+                        <span data-i18n="full_day">Full day</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Cities -->
+    <section class="popular-section" id="popular-section">
+        <div class="container">
+            <h2 data-i18n="popular_destinations">Popular Destinations</h2>
+            <div class="popular-grid">
+                <button class="popular-card" data-city="Barcelona, Spain">
+                    <div class="popular-card-bg" style="background-image: url('https://images.unsplash.com/photo-1583422409516-2895a77efded?w=400&h=300&fit=crop')"></div>
+                    <div class="popular-card-content">
+                        <h3>Barcelona</h3>
+                        <p>Spain</p>
+                    </div>
+                </button>
+                <button class="popular-card" data-city="Berlin, Germany">
+                    <div class="popular-card-bg" style="background-image: url('https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&h=300&fit=crop')"></div>
+                    <div class="popular-card-content">
+                        <h3>Berlin</h3>
+                        <p>Germany</p>
+                    </div>
+                </button>
+                <button class="popular-card" data-city="Amsterdam, Netherlands">
+                    <div class="popular-card-bg" style="background-image: url('https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop')"></div>
+                    <div class="popular-card-content">
+                        <h3>Amsterdam</h3>
+                        <p>Netherlands</p>
+                    </div>
+                </button>
+                <button class="popular-card" data-city="London, UK">
+                    <div class="popular-card-bg" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=300&fit=crop')"></div>
+                    <div class="popular-card-content">
+                        <h3>London</h3>
+                        <p>United Kingdom</p>
+                    </div>
+                </button>
+                <button class="popular-card" data-city="Tenerife, Canary Islands">
+                    <div class="popular-card-bg" style="background-image: url('https://images.unsplash.com/photo-1540202404-a2f29016b523?w=400&h=300&fit=crop')"></div>
+                    <div class="popular-card-content">
+                        <h3>Tenerife</h3>
+                        <p>Canary Islands</p>
+                    </div>
+                </button>
+                <button class="popular-card" data-city="New York, USA">
+                    <div class="popular-card-bg" style="background-image: url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400&h=300&fit=crop')"></div>
+                    <div class="popular-card-content">
+                        <h3>New York</h3>
+                        <p>USA</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="results-section">
+        <div class="container">
+            <div class="results-header">
+                <h2 id="results-title" data-i18n="events">Events</h2>
+                <p id="results-subtitle"></p>
+            </div>
+            
+            <!-- Loading State -->
+            <div class="loading-container" id="loading">
+                <div class="loading-spinner"></div>
+                <p data-i18n="discovering">Discovering events...</p>
+            </div>
+
+            <!-- Events Grid -->
+            <div class="results-grid" id="events-grid">
+                <!-- Event cards will be inserted here -->
+            </div>
+
+            <!-- Activities Divider -->
+            <div class="activities-divider" id="activities-divider">
+                <div class="divider-line"></div>
+                <span data-i18n="things_anytime">Things to do anytime</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <!-- Activities Grid -->
+            <div class="results-grid" id="activities-grid">
+                <!-- Activity cards will be inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3 data-i18n="no_events">No events found</h3>
+                <p data-i18n="try_adjusting">Try adjusting your search criteria or expanding the radius</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo">What's On!</span>
+                    <p data-i18n="footer_tagline">Discover local events worldwide</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" data-i18n="about">About</a>
+                    <a href="#" data-i18n="privacy">Privacy</a>
+                    <a href="#" data-i18n="terms">Terms</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 What's On! All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

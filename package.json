@@ -1,0 +1,8 @@
+{
+    "name": "whats-on",
+    "version": "2.0.0",
+    "description": "Discover local events worldwide",
+    "scripts": {
+        "dev": "vercel dev"
+    }
+}
